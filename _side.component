@@ -1,0 +1,77 @@
+// client side component(flutter)
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+class MyApp extends StatelessWidget {
+  final String serverUrl = 'http://your-server-url';  // Replace with your server URL
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Remote Control',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Remote Control'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                onPressed: () {
+                  connectToServer();
+                },
+                child: Text('Connect to Server'),
+              ),
+              RaisedButton(
+                onPressed: () {
+                  sendCommand('command');
+                },
+                child: Text('Send Command'),
+              ),
+              RaisedButton(
+                onPressed: () {
+                  getCommand();
+                },
+                child: Text('Get Command'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void connectToServer() async {
+    String phoneId = 'unique_phone_id';  // Replace with a unique ID for each phone
+    String phoneInfo = 'phone_info';  // Replace with phone information if needed
+
+    final response = await http.post(
+      '$serverUrl/connect',
+      body: {'phone_id': phoneId, 'phone_info': phoneInfo},
+    );
+
+    if (response.statusCode == 200) {
+      print('Connected to server');
+    } else {
+      print('Failed to connect to server');
+    }
+  }
+
+  void sendCommand(String command) async {
+    String phoneId = 'unique_phone_id';  // Replace with the same unique ID used for connection
+
+    final response = await http.post(
+      '$serverUrl/send_command',
+      body: {'phone_id': phoneId, 'command': command},
+    );
+
+    if (response.statusCode == 200) {
+      print('Command sent');
+    } else {
+      print('Failed to send command');
+    }
+  }
+
+  void getCommand() async {
+    String
